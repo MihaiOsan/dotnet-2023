@@ -20,31 +20,23 @@ public struct GeoFeature : BaseShape
         Residential
     }
 
+    public static Dictionary<GeoFeatureType, (Color color, int zIndex)> GeoFeatureProperties = new()
+    {
+        [GeoFeatureType.Plain] = (Color.LightGreen, 10),
+        [GeoFeatureType.Hills] = (Color.DarkGreen, 12),
+        [GeoFeatureType.Mountains] = (Color.LightGray, 13),
+        [GeoFeatureType.Forest] = (Color.Green, 11),
+        [GeoFeatureType.Desert] = (Color.SandyBrown, 9),
+        [GeoFeatureType.Unknown] = (Color.Magenta, 8),
+        [GeoFeatureType.Water] = (Color.LightBlue, 40),
+        [GeoFeatureType.Residential] = (Color.LightCoral, 41)
+    };
+
     public int ZIndex
     {
         get
         {
-            switch (Type)
-            {
-                case GeoFeatureType.Plain:
-                    return 10;
-                case GeoFeatureType.Hills:
-                    return 12;
-                case GeoFeatureType.Mountains:
-                    return 13;
-                case GeoFeatureType.Forest:
-                    return 11;
-                case GeoFeatureType.Desert:
-                    return 9;
-                case GeoFeatureType.Unknown:
-                    return 8;
-                case GeoFeatureType.Water:
-                    return 40;
-                case GeoFeatureType.Residential:
-                    return 41;
-            }
-
-            return 7;
+            return GeoFeatureProperties[Type].zIndex;
         }
         set { }
     }
@@ -55,34 +47,7 @@ public struct GeoFeature : BaseShape
 
     public void Render(IImageProcessingContext context)
     {
-        var color = Color.Magenta;
-        switch (Type)
-        {
-            case GeoFeatureType.Plain:
-                color = Color.LightGreen;
-                break;
-            case GeoFeatureType.Hills:
-                color = Color.DarkGreen;
-                break;
-            case GeoFeatureType.Mountains:
-                color = Color.LightGray;
-                break;
-            case GeoFeatureType.Forest:
-                color = Color.Green;
-                break;
-            case GeoFeatureType.Desert:
-                color = Color.SandyBrown;
-                break;
-            case GeoFeatureType.Unknown:
-                color = Color.Magenta;
-                break;
-            case GeoFeatureType.Water:
-                color = Color.LightBlue;
-                break;
-            case GeoFeatureType.Residential:
-                color = Color.LightCoral;
-                break;
-        }
+        var color = GeoFeatureProperties[Type].color;
 
         if (!IsPolygon)
         {
